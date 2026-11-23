@@ -23,7 +23,7 @@ The project comes in two versions that share the same rules and look:
 
 ## 🚀 Live Demo
 
-🌐 **Website:** https://YOUR-SITE.netlify.app
+🌐 **Website:** (https://gatewaysystem.netlify.app/)
 
 Sign in with the demo account below, then try the **Try a test case** buttons inside each payment sheet.
 
