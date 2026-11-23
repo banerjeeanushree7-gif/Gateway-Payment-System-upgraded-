@@ -107,8 +107,6 @@ Sign in with the demo account below, then try the **Try a test case** buttons in
 ```
 Gateway-Payment-System-upgraded-/
 │
-├── netlify/
-│   └── index.html                       # complete browser demo (single file)
 │
 ├── PaymentGateway/                      # Java edition (Maven project)
 │   ├── src/
