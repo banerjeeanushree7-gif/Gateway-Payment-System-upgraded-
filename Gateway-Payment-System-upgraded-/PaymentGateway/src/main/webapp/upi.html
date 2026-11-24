@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPI payment</title><link rel="stylesheet" href="style.css"></head>
+<body data-page="upi"><div class="container">
+  <h2>UPI payment</h2>
+  <form action="PaymentServlet" method="post" novalidate>
+    <input type="hidden" name="method" value="upi">
+    <label for="upiId">UPI ID</label>
+    <input id="upiId" name="upiId" data-rule="upi" placeholder="name@okaxis" autocomplete="off">
+    <label for="amount">Amount</label>
+    <input id="amount" name="amount" data-rule="amount" inputmode="decimal" placeholder="0.00">
+    <p class="err" role="alert"></p>
+    <button type="submit">Pay now</button>
+  </form>
+  <p><a href="paymentOptions.html">Back</a></p>
+</div><script src="app.js"></script></body></html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Net banking</title><link rel="stylesheet" href="style.css"></head>
+<body data-page="netbank"><div class="container">
+  <h2>Net banking</h2>
+  <form action="PaymentServlet" method="post" novalidate>
+    <input type="hidden" name="method" value="netbank">
+    <label for="bank">Bank</label>
+    <select id="bank" name="bank" data-rule="bank">
+      <option value="">Select a bank</option><option value="SBI">State Bank of India</option>
+      <option value="HDFC">HDFC Bank</option><option value="ICICI">ICICI Bank</option><option value="Axis">Axis Bank</option>
+    </select>
+    <label for="accNumber">Account number</label>
+    <input id="accNumber" name="accNumber" data-rule="acc" inputmode="numeric" placeholder="10 to 16 digits" autocomplete="off">
+    <label for="ifsc">IFSC code</label>
+    <input id="ifsc" name="ifsc" data-rule="ifsc" placeholder="SBIN0123456" autocomplete="off">
+    <label for="amount">Amount</label>
+    <input id="amount" name="amount" data-rule="amount" inputmode="decimal" placeholder="0.00">
+    <p class="err" role="alert"></p>
+    <button type="submit">Pay now</button>
+  </form>
+  <p><a href="paymentOptions.html">Back</a></p>
+</div><script src="app.js"></script></body></html>

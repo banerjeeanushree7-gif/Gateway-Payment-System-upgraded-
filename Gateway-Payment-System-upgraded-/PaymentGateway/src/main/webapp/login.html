@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gateway</title><link rel="stylesheet" href="style.css"></head>
+<body data-page="login"><div class="container">
+  <div class="logo">Gateway</div><p class="muted">Sign in to pay by UPI, card or net banking.</p>
+  <form action="LoginServlet" method="post">
+    <label for="email">Email</label><input id="email" type="email" name="email" autocomplete="username" required>
+    <label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required>
+    <p class="err" role="alert"></p>
+    <button type="submit">Sign in</button>
+  </form>
+</div><script src="app.js"></script></body></html>

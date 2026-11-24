@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card payment</title><link rel="stylesheet" href="style.css"></head>
+<body data-page="card"><div class="container">
+  <h2>Card payment</h2>
+  <form action="PaymentServlet" method="post" novalidate>
+    <input type="hidden" name="method" value="card">
+    <label for="cardNumber">Card number</label>
+    <input id="cardNumber" name="cardNumber" data-rule="pan" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="1234 5678 9012 3456">
+    <label for="cardName">Name on card</label>
+    <input id="cardName" name="cardName" data-rule="name" autocomplete="cc-name">
+    <label for="expiry">Expiry (MM/YY)</label>
+    <input id="expiry" name="expiry" data-rule="expiry" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY">
+    <label for="cvv">CVV</label>
+    <input id="cvv" name="cvv" type="password" data-rule="cvv" inputmode="numeric" autocomplete="cc-csc" maxlength="4">
+    <label for="amount">Amount</label>
+    <input id="amount" name="amount" data-rule="amount" inputmode="decimal" placeholder="0.00">
+    <p class="err" role="alert"></p>
+    <button type="submit">Pay now</button>
+  </form>
+  <p><a href="paymentOptions.html">Back</a></p>
+</div><script src="app.js"></script></body></html>
