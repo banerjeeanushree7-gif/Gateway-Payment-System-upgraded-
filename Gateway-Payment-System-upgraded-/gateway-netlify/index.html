@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gateway</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%B3%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ebe5fb;--top:#d9cdf8;--panel:#fff;--ink:#1d1640;--mute:#6c6490;--line:#ddd4f5;--pri:#5b34d6;--priInk:#fff;--tile:#e7defb;--ok:#0e7a55;--bad:#c2312d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15102b;--top:#241c4a;--panel:#201a3d;--ink:#ece8ff;--mute:#a79fd0;--line:#342d5c;--pri:#9a7dff;--priInk:#120b30;--tile:#2d2552;--ok:#3ccf91;--bad:#ff7b76;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15102b;--top:#241c4a;--panel:#201a3d;--ink:#ece8ff;--mute:#a79fd0;--line:#342d5c;--pri:#9a7dff;--priInk:#120b30;--tile:#2d2552;--ok:#3ccf91;--bad:#ff7b76;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Instrument Sans",system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+[hidden]{display:none!important}
+.app{max-width:440px;margin:0 auto;min-height:100vh;background:linear-gradient(var(--top),var(--bg) 220px)}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.logo{display:flex;align-items:center;gap:6px;font-weight:700;font-size:1.4rem;letter-spacing:-.02em;color:var(--pri)}
+.logo svg{width:28px;height:28px;stroke-width:2.2}
+.auth{padding:56px 24px;display:flex;flex-direction:column;gap:6px}
+.auth .logo{font-size:2rem;margin-bottom:4px}
+.auth p{margin:0 0 16px;color:var(--mute)}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:.85rem;color:var(--mute);margin-bottom:4px}
+.f input,.f select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.btn{display:block;width:100%;padding:13px;border-radius:12px;background:var(--pri);color:var(--priInk);font-weight:600;margin-top:8px}
+.btn.alt{background:var(--tile);color:var(--ink)}
+.err{color:var(--bad);min-height:1.3em;font-size:.9rem;margin:4px 0 0}
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px}
+.top button{width:40px;height:40px;border-radius:50%;display:grid;place-items:center}
+.av{background:var(--pri);color:var(--priInk);font-weight:700;font-size:.9rem}
+.body{background:var(--bg);border-radius:20px 20px 0 0;padding:16px 14px 120px;min-height:80vh;box-shadow:0 -6px 20px rgba(91,52,214,.08)}
+.ban{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:16px;background:var(--tile)}
+.ban::-webkit-scrollbar{display:none}
+.sl{flex:0 0 100%;scroll-snap-align:start;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px}
+.sl h3{margin:0 0 12px;font-size:1.2rem;line-height:1.2}
+.sl .btn{display:inline-block;width:auto;padding:8px 14px;margin:0;font-size:.9rem}
+.circ{flex:0 0 108px;height:108px;border-radius:50%;background:var(--panel);display:grid;place-items:center;text-align:center;line-height:1;color:var(--pri)}
+.circ b{font-size:2.8rem}.circ span{font-size:.8rem;color:var(--mute)}
+.dots{display:flex;justify-content:center;gap:6px;margin:8px 0 14px}
+.dots button{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.dots button[aria-current="true"]{background:var(--pri);width:18px;border-radius:4px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 14px;font-size:1.1rem}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 6px}
+.t{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.78rem;text-align:center;line-height:1.2;transition:transform .12s}
+.t:active{transform:scale(.94)}
+.t i{width:52px;height:52px;border-radius:50%;background:var(--tile);color:var(--pri);display:grid;place-items:center}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row .c{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--tile);flex:none}
+.row .m{flex:1;min-width:0}.row .m b{display:block;font-weight:600}.row .m small{color:var(--mute)}
+.row .a{text-align:right}.row .a small{display:block}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.pdf{font-size:.75rem;padding:3px 8px;border:1px solid var(--pri);border-radius:99px;color:var(--pri);margin-top:2px}
+.mute{color:var(--mute);font-size:.9rem}
+.fabw{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:0 0 calc(16px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.fab{pointer-events:auto;display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:99px;background:var(--ink);color:var(--bg);font-weight:600;box-shadow:0 8px 24px rgba(29,22,64,.35)}
+.wrap{position:fixed;inset:0;background:rgba(20,12,50,.5);display:flex;align-items:flex-end;justify-content:center;z-index:5}
+.sh{width:100%;max-width:440px;max-height:92vh;overflow-y:auto;background:var(--panel);border-radius:22px 22px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom,0px));animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.sh header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sh h2{margin:0;font-size:1.15rem}
+.x{width:36px;height:36px;border-radius:50%;background:var(--tile);font-size:1.3rem;line-height:1}
+.amt{font-size:1.6rem;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chips b{width:100%;font-size:.8rem;color:var(--mute);font-weight:500}
+.chips button{font-size:.78rem;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mute)}
+.vf{width:200px;height:200px;margin:8px auto 16px;position:relative;border-radius:16px;background:repeating-linear-gradient(45deg,var(--tile) 0 8px,var(--bg) 8px 16px)}
+.vf:after{content:"";position:absolute;left:8px;right:8px;height:3px;background:var(--pri);border-radius:2px;animation:sc 1.8s ease-in-out infinite alternate}
+@keyframes sc{from{top:10px}to{top:187px}}
+.res{text-align:center;padding:8px 0}
+.res .big{width:84px;height:84px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;color:#fff;animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+.res .big svg{width:44px;height:44px;stroke-width:2.6}
+.res .big.ok{background:var(--ok)}.res .big.bad{background:var(--bad)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+.kv{text-align:left;margin:14px 0}
+.kv div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.92rem}
+.kv span:first-child{color:var(--mute)}
+details{text-align:left;margin:8px 0;font-size:.88rem}
+summary{cursor:pointer;color:var(--pri)}
+details div{padding:2px 0}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:.9rem;z-index:9}
+@media(prefers-reduced-motion:reduce){.sh,.res .big,.vf:after{animation:none}.t{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="auth" id="auth">
+    <div class="logo"><svg class="i" viewBox="0 0 24 24"><path d="M4 21V11a8 8 0 0 1 16 0v10M9 21v-9a3 3 0 0 1 6 0v9"/></svg>Gateway</div>
+    <p>Sign in to pay by UPI, card or net banking.</p>
+    <div class="f"><label for="em">Email</label><input id="em" value="test@user.com" autocomplete="off"></div>
+    <div class="f"><label for="pw">Password</label><input id="pw" type="password" value="12345" autocomplete="off"></div>
+    <p class="err" id="lerr" role="alert"></p>
+    <button class="btn" id="login">Sign in</button>
+    <p class="mute">Demo account: test@user.com / 12345. Payments are simulated and nothing is charged.</p>
+  </section>
+
+  <section id="home" hidden>
+    <div class="top">
+      <button class="av" id="avatar" aria-label="Profile">TU</button>
+      <div class="logo"><svg class="i" viewBox="0 0 24 24"><path d="M4 21V11a8 8 0 0 1 16 0v10M9 21v-9a3 3 0 0 1 6 0v9"/></svg>Gateway</div>
+      <div style="display:flex"><button id="srch" aria-label="Search history"></button><button id="bell" aria-label="Notifications"></button></div>
+    </div>
+    <div class="body">
+      <div class="ban" id="ban"></div>
+      <div class="dots" id="dots"></div>
+      <div class="card"><h2>Money transfer</h2><div class="grid" id="tiles"></div></div>
+      <div class="card"><h2>Recent payments</h2><div id="recent"></div></div>
+    </div>
+    <div class="fabw"><button class="fab" id="scan"></button></div>
+  </section>
+
+  <div class="wrap" id="wrap" hidden>
+    <div class="sh" role="dialog" aria-modal="true" aria-labelledby="st">
+      <header><h2 id="st"></h2><button class="x" id="xb" aria-label="Close">&times;</button></header>
+      <div id="sb"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+//#validators
+function luhn(s){var sum=0,alt=false;for(var i=s.length-1;i>=0;i--){var n=+s[i];if(alt){n*=2;if(n>9)n-=9}sum+=n;alt=!alt}return sum%10===0}
+function digits(s){return String(s||'').replace(/[\s-]/g,'')}
+var BANKS=['SBI','HDFC','ICICI','Axis'];
+var AMT=/^\d{1,7}(\.\d{1,2})?$/;
+function amountOk(a){a=String(a).trim();return AMT.test(a)&&+a>0&&+a<=1e6}
+function expiryOk(v,now){var m=/^(0[1-9]|1[0-2])\/(\d{2})$/.exec(String(v).trim());if(!m)return false;var y=2000+ +m[2],mo=+m[1];return y>now.y||(y===now.y&&mo>=now.m)}
+function maskFor(m,v){
+  var p=digits(v.cardNumber),u=String(v.upi||'').trim(),n=String(v.mobile||'').trim(),a=String(v.acc||'').trim();
+  if(m==='card'&&/^\d{12,19}$/.test(p)&&luhn(p))return '**** **** **** '+p.slice(-4);
+  if(m==='upi'&&/^[A-Za-z0-9._-]{2,64}@[A-Za-z]{2,32}$/.test(u)){var i=u.indexOf('@'),l=u.slice(0,i);return l[0]+'****'+l[l.length-1]+u.slice(i)}
+  if(m==='mobile'&&/^[6-9]\d{9}$/.test(n))return n.slice(0,2)+'******'+n.slice(-2);
+  if(m==='netbank'&&/^\d{10,16}$/.test(a))return '****'+a.slice(-4);
+  return '-';
+}
+// Rules run in order and stop at the first failure, like PaymentServlet.
+function rulesFor(m,v,now){
+  var r=[['Amount is a plain decimal, max 2 places',function(){return AMT.test(String(v.amount).trim())}],
+         ['Amount is above 0 and at most 1,000,000',function(){return amountOk(v.amount)}]];
+  var pan=digits(v.cardNumber),amex=/^3[47]/.test(pan);
+  var T={
+    card:[['Name on card present',function(){return String(v.cardName).trim().length>0&&v.cardName.length<=60}],
+      ['Card number is 12 to 19 digits',function(){return /^\d{12,19}$/.test(pan)}],
+      ['Card number passes Luhn check',function(){return luhn(pan)}],
+      ['Expiry is MM/YY and not in the past',function(){return expiryOk(v.expiry,now)}],
+      ['CVV is '+(amex?4:3)+' digits',function(){return (amex?/^\d{4}$/:/^\d{3}$/).test(v.cvv)}],
+      ['Issuer does not decline (numbers ending in 5 do)',function(){return pan.slice(-1)!=='5'}]],
+    upi:[['UPI ID looks like name@bank',function(){return /^[A-Za-z0-9._-]{2,64}@[A-Za-z]{2,32}$/.test(String(v.upi).trim())}]],
+    mobile:[['Mobile number is 10 digits starting 6 to 9',function(){return /^[6-9]\d{9}$/.test(String(v.mobile).trim())}]],
+    netbank:[['Bank is on the allowed list',function(){return BANKS.indexOf(v.bank)>=0}],
+      ['Account number is 10 to 16 digits',function(){return /^\d{10,16}$/.test(String(v.acc).trim())}],
+      ['IFSC code format is valid',function(){return /^[A-Z]{4}0[A-Z0-9]{6}$/.test(String(v.ifsc).trim().toUpperCase())}]]
+  };
+  return r.concat(T[m]);
+}
+function run(m,v,now){
+  var trace=[],failed=null;
+  rulesFor(m,v,now).forEach(function(r){
+    if(failed){trace.push({l:r[0],s:'skip'});return}
+    var ok=false;try{ok=r[1]()}catch(e){}
+    trace.push({l:r[0],s:ok?'ok':'bad'});if(!ok)failed=r[0];
+  });
+  return{trace:trace,failed:failed,masked:maskFor(m,v)};
+}
+//#end
+//#pdf
+function pdfEsc(s){return String(s).replace(/[^\x20-\x7E]/g,' ').replace(/([\\()])/g,'\\$1')}
+function makePdf(rows,foot){
+  var c='0.357 0.204 0.839 rg 0 742 595 100 re f\n'+
+    'BT 1 1 1 rg /F2 26 Tf 56 790 Td (Gateway) Tj ET\nBT 1 1 1 rg /F1 12 Tf 56 764 Td (Payment statement) Tj ET\n';
+  var y=700;
+  rows.forEach(function(r){
+    c+='0.85 0.83 0.92 RG 56 '+(y-10)+' m 539 '+(y-10)+' l S\n';
+    c+='BT 0.42 0.39 0.56 rg /F1 10 Tf 56 '+y+' Td ('+pdfEsc(r[0])+') Tj ET\n';
+    c+='BT 0.11 0.09 0.25 rg /F2 12 Tf 200 '+y+' Td ('+pdfEsc(r[1])+') Tj ET\n';
+    y-=32;
+  });
+  c+='BT 0.42 0.39 0.56 rg /F1 9 Tf 56 '+(y-10)+' Td ('+pdfEsc(foot)+') Tj ET\n';
+  var o=['<</Type/Catalog/Pages 2 0 R>>','<</Type/Pages/Kids[3 0 R]/Count 1>>',
+    '<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Contents 4 0 R/Resources<</Font<</F1 5 0 R/F2 6 0 R>>>>>>',
+    '<</Length '+c.length+'>>\nstream\n'+c+'endstream',
+    '<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>',
+    '<</Type/Font/Subtype/Type1/BaseFont/Helvetica-Bold/Encoding/WinAnsiEncoding>>'];
+  var out='%PDF-1.4\n',off=[];
+  o.forEach(function(b,i){off.push(out.length);out+=(i+1)+' 0 obj\n'+b+'\nendobj\n'});
+  var x=out.length;out+='xref\n0 '+(o.length+1)+'\n0000000000 65535 f \n';
+  off.forEach(function(n){out+=('0000000000'+n).slice(-10)+' 00000 n \n'});
+  out+='trailer\n<</Size '+(o.length+1)+'/Root 1 0 R>>\nstartxref\n'+x+'\n%%EOF';
+  return new TextEncoder().encode(out);
+}
+//#end
+
+var $=function(s){return document.querySelector(s)};
+function h(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+var P={scan:'M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16',
+mobile:'M9 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM11 18h2',
+upi:'M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM16 8v5a2.5 2.5 0 0 0 5 0v-1a9 9 0 1 0-3.5 7.1',
+bank:'M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18',
+card:'M3 6h18v12H3zM3 10h18M7 15h3',
+history:'M12 7v5l3 2M4 12a8 8 0 1 0 2.5-5.8M4 4v4h4',
+receive:'M12 4v10M8 10l4 4 4-4M5 20h14',
+file:'M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5',
+search:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4',
+bell:'M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20h4',
+check:'M5 12l5 5 9-10',cross:'M6 6l12 12M18 6L6 18'};
+function ic(n){return '<svg class="i" viewBox="0 0 24 24"><path d="'+P[n]+'"/></svg>'}
+function toast(t){var e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2200)}
+
+var KEY='gateway.v1',mem=[],user=null,LABEL={card:'Card',upi:'UPI',mobile:'UPI (mobile)',netbank:'Net banking'};
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return mem}}
+function store(a){mem=a;try{localStorage.setItem(KEY,JSON.stringify(a))}catch(e){}}
+function fmt(a){return Number(a).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function when(t){return new Date(t).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})}
+
+// Save a generated file: viewer-confirmed save inside claude.ai, normal download elsewhere (e.g. Netlify).
+async function savePdf(name,bytes){
+  var dl=null;try{dl=window.claude?await window.claude.use('downloads'):null}catch(e){}
+  if(dl){try{await dl.save({filename:name,data:bytes});return}catch(e){if(e&&e.code==='declined')return}}
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
+  a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000);
+}
+function statement(p){
+  var d=new Date(p.t);
+  var rows=[['Status','SUCCESS'],['Transaction ID',p.id],['Date and time',d.toLocaleString('en-IN')],['Paid with',LABEL[p.m]],
+    ['Account / ID',p.masked],['Amount','INR '+Number(p.a).toFixed(2)],['Account holder','test@user.com']];
+  savePdf('Gateway-statement-'+p.id+'.pdf',makePdf(rows,'Simulated payment from the Gateway demo. No money was moved.'));
+  toast('Statement ready');
+}
+
+// ---- sign in / home
+$('#login').onclick=function(){
+  var ok=$('#em').value.trim()==='test@user.com'&&$('#pw').value==='12345';
+  $('#lerr').textContent=ok?'':'Email or password is incorrect.';
+  if(ok){user='test@user.com';$('#auth').hidden=true;$('#home').hidden=false;renderRecent();startBanner()}
+};
+$('#pw').onkeydown=function(e){if(e.key==='Enter')$('#login').click()};
+$('#srch').innerHTML=ic('search');$('#bell').innerHTML=ic('bell');
+$('#scan').innerHTML=ic('scan')+'Scan any QR';
+$('#bell').onclick=function(){toast('You\u2019re all caught up')};
+$('#srch').onclick=function(){history_()};
+$('#scan').onclick=function(){scan()};
+$('#avatar').onclick=function(){
+  var b=h('div');b.appendChild(h('p','mute','Signed in as test@user.com'));
+  b.appendChild(h('p',null,'Your UPI ID: test@gateway'));
+  var s=h('button','btn alt','Sign out');s.onclick=function(){closeSheet();user=null;$('#home').hidden=true;$('#auth').hidden=false;stopBanner()};
+  b.appendChild(s);sheet('Profile',b);
+};
+
+var SL=[['Lightning fast payments always.','Pay by UPI',function(){pay('upi')},'2','in seconds'],
+        ['Cards, UPI and net banking in one place.','Pay by card',function(){pay('card')},'3','ways to pay'],
+        ['A PDF statement for every payment.','See statements',function(){history_(true)},'PDF','on demand']];
+var ban=$('#ban'),dots=$('#dots'),bt=null;
+SL.forEach(function(s,i){
+  var d=h('div','sl'),l=h('div'),b=h('button','btn',s[1]);b.onclick=s[2];
+  l.appendChild(h('h3',null,s[0]));l.appendChild(b);d.appendChild(l);
+  var c=h('div','circ'),w=h('div');w.appendChild(h('b',null,s[3]));w.appendChild(h('br'));w.appendChild(h('span',null,s[4]));c.appendChild(w);d.appendChild(c);ban.appendChild(d);
+  var dt=h('button');dt.setAttribute('aria-label','Slide '+(i+1));dt.onclick=function(){go(i)};dots.appendChild(dt);
+});
+function go(i){ban.scrollTo({left:i*ban.clientWidth,behavior:'smooth'})}
+function cur(){return Math.round(ban.scrollLeft/Math.max(1,ban.clientWidth))}
+ban.onscroll=function(){var c=cur();Array.prototype.forEach.call(dots.children,function(d,i){d.setAttribute('aria-current',i===c)})};
+function startBanner(){ban.onscroll();stopBanner();if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;bt=setInterval(function(){go((cur()+1)%SL.length)},4500)}
+function stopBanner(){clearInterval(bt)}
+
+var TILES=[['scan','Scan & Pay',scan],['mobile','To Mobile',function(){pay('mobile')}],['upi','To UPI ID',function(){pay('upi')}],['bank','To Bank A/c',function(){pay('netbank')}],
+  ['card','Pay by Card',function(){pay('card')}],['history','History',function(){history_()}],['file','Statements',function(){history_(true)}],['receive','Receive Money',receive]];
+TILES.forEach(function(t){
+  var b=h('button','t');b.innerHTML='<i>'+ic(t[0])+'</i>';b.appendChild(h('span',null,t[1]));b.onclick=t[2];$('#tiles').appendChild(b);
+});
+
+function payRow(p,pdf){
+  var r=h('div','row'),c=h('div','c');c.innerHTML=ic(p.s==='SUCCESS'?'check':'cross');c.className+=p.s==='SUCCESS'?' ok':' bad';
+  var m=h('div','m');m.appendChild(h('b',null,LABEL[p.m]+' \u00b7 '+p.masked));m.appendChild(h('small',null,when(p.t)));
+  var a=h('div','a');a.appendChild(h('b',null,p.a?'\u20b9'+fmt(p.a):'-'));a.appendChild(h('small',p.s==='SUCCESS'?'ok':'bad',p.s==='SUCCESS'?'Paid':'Failed'));
+  if(pdf&&p.s==='SUCCESS'){var d=h('button','pdf','PDF');d.onclick=function(){statement(p)};a.appendChild(d)}
+  r.appendChild(c);r.appendChild(m);r.appendChild(a);return r;
+}
+function renderRecent(){
+  var box=$('#recent');box.textContent='';var l=load().slice(0,3);
+  if(!l.length)box.appendChild(h('p','mute','No payments yet. Pick an option above to send your first one.'));
+  l.forEach(function(p){box.appendChild(payRow(p,false))});
+}
+
+// ---- sheets
+function sheet(title,body){$('#st').textContent=title;var c=$('#sb');c.textContent='';c.appendChild(body);$('#wrap').hidden=false;document.body.style.overflow='hidden';var f=c.querySelector('input,select,button');if(f)f.focus()}
+function closeSheet(){$('#wrap').hidden=true;document.body.style.overflow='';if(user)renderRecent()}
+$('#xb').onclick=closeSheet;
+$('#wrap').onclick=function(e){if(e.target===this)closeSheet()};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#wrap').hidden)closeSheet()});
+
+function history_(onlyOk){
+  var b=h('div'),l=load().filter(function(p){return!onlyOk||p.s==='SUCCESS'});
+  if(!l.length)b.appendChild(h('p','mute',onlyOk?'No successful payments yet.':'No payments yet.'));
+  l.forEach(function(p){b.appendChild(payRow(p,true))});
+  if(l.length){var c=h('button','btn alt','Clear history');c.onclick=function(){store([]);history_(onlyOk)};b.appendChild(c)}
+  sheet(onlyOk?'Statements':'History',b);
+}
+function receive(){
+  var b=h('div');b.appendChild(h('p','mute','Share your UPI ID to get paid.'));b.appendChild(h('p','amt','test@gateway'));
+  var c=h('button','btn','Copy UPI ID');c.onclick=function(){try{navigator.clipboard.writeText('test@gateway')}catch(e){}toast('UPI ID copied')};
+  b.appendChild(c);sheet('Receive money',b);
+}
+function scan(){
+  var b=h('div');b.appendChild(h('div','vf'));b.appendChild(h('p','mute','Point your camera at a Gateway QR code.'));
+  var s=h('button','btn','Simulate a scan');s.onclick=function(){pay('upi',{upi:'shop@gateway'});toast('Scanned shop@gateway')};
+  b.appendChild(s);sheet('Scan any QR',b);
+}
+
+var FIELDS={cardNumber:['Card number',{ph:'1234 5678 9012 3456',im:'numeric',ml:23}],cardName:['Name on card',{}],expiry:['Expiry (MM/YY)',{ph:'MM/YY',ml:5}],
+  cvv:['CVV',{pw:1,im:'numeric',ml:4}],upi:['UPI ID',{ph:'name@okaxis'}],mobile:['Mobile number',{ph:'10-digit number',im:'numeric',ml:10}],
+  bank:['Bank',{sel:BANKS}],acc:['Account number',{ph:'10 to 16 digits',im:'numeric'}],ifsc:['IFSC code',{ph:'SBIN0123456'}],amount:['Amount (\u20b9)',{ph:'0.00',im:'decimal'}]};
+var USE={card:['cardNumber','cardName','expiry','cvv'],upi:['upi'],mobile:['mobile'],netbank:['bank','acc','ifsc']};
+var CHIPS=[['card','Valid card',{cardNumber:'4111 1111 1111 1111',cardName:'Asha Roy',expiry:'12/30',cvv:'123',amount:'499'}],
+  ['card','Declined (ends in 5)',{cardNumber:'4111 1111 1111 1145',cardName:'Asha Roy',expiry:'12/30',cvv:'123',amount:'120'}],
+  ['card','Expired card',{cardNumber:'4111 1111 1111 1111',cardName:'Asha Roy',expiry:'01/20',cvv:'123',amount:'75'}],
+  ['upi','Amount \u201cNaN\u201d',{upi:'asha@okaxis',amount:'NaN'}],['upi','UPI \u201c@okaxis\u201d',{upi:'@okaxis',amount:'250'}],
+  ['upi','Valid UPI',{upi:'asha@okaxis',amount:'250'}],['mobile','Valid number',{mobile:'9958736314',amount:'300'}],
+  ['netbank','Valid net banking',{bank:'SBI',acc:'1234567890',ifsc:'SBIN0123456',amount:'1500'}]];
+
+function pay(m,pre){
+  var b=h('div');
+  USE[m].concat('amount').forEach(function(k){
+    var f=FIELDS[k],o=f[1],w=h('div','f'),l=h('label',null,f[0]);l.htmlFor='f_'+k;
+    var i=o.sel?h('select'):h('input');i.id='f_'+k;i.autocomplete='off';
+    if(o.sel){i.appendChild(new Option('Select a bank',''));o.sel.forEach(function(x){i.appendChild(new Option(x,x))})}
+    else{if(o.ph)i.placeholder=o.ph;if(o.im)i.inputMode=o.im;if(o.ml)i.maxLength=o.ml;if(o.pw)i.type='password'}
+    if(k==='cardNumber')i.oninput=function(){var d=i.value.replace(/\D/g,'').slice(0,19);i.value=d.replace(/(.{4})/g,'$1 ').trim()};
+    w.appendChild(l);w.appendChild(i);b.appendChild(w);
+  });
+  var er=h('p','err');er.setAttribute('role','alert');b.appendChild(er);
+  var go_=h('button','btn','Pay now');b.appendChild(go_);
+  var ch=h('div','chips');ch.appendChild(h('b',null,'Try a test case'));
+  CHIPS.forEach(function(c){if(c[0]!==m)return;var x=h('button',null,c[1]);x.type='button';
+    x.onclick=function(){for(var k in c[2])if(document.getElementById('f_'+k))document.getElementById('f_'+k).value=c[2][k]};ch.appendChild(x)});
+  b.appendChild(ch);
+  go_.onclick=function(){
+    var v={};Object.keys(FIELDS).forEach(function(k){var e=document.getElementById('f_'+k);v[k]=e?e.value:''});
+    var d=new Date(),res=run(m,v,{y:d.getUTCFullYear(),m:d.getUTCMonth()+1});
+    var id='GW'+(window.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(16).slice(2)+'0000000000').replace(/-/g,'').slice(0,10).toUpperCase();
+    var rec={id:id,t:d.toISOString(),m:m,masked:res.masked,a:amountOk(v.amount)?String(v.amount).trim():null,s:res.failed?'FAILED':'SUCCESS'};
+    var all=load();all.unshift(rec);store(all.slice(0,50));
+    result(rec,res,m);
+  };
+  sheet(LABEL[m]==='UPI (mobile)'?'Pay to mobile':m==='netbank'?'Pay to bank account':m==='card'?'Pay by card':'Pay to UPI ID',b);
+  if(pre)for(var k in pre)if(document.getElementById('f_'+k))document.getElementById('f_'+k).value=pre[k];
+}
+
+function result(p,res,m){
+  var ok=p.s==='SUCCESS',b=h('div','res'),big=h('div','big '+(ok?'ok':'bad'));big.innerHTML=ic(ok?'check':'cross');b.appendChild(big);
+  b.appendChild(h('div','amt',ok?'\u20b9'+fmt(p.a):'Payment failed'));
+  b.appendChild(h('p','mute',ok?'Payment successful':res.failed));
+  var kv=h('div','kv');[['Paid with',LABEL[m]],['Account / ID',p.masked],['Transaction ID',p.id],['Time',when(p.t)]].forEach(function(r){
+    var d=h('div');d.appendChild(h('span',null,r[0]));d.appendChild(h('span',null,r[1]));kv.appendChild(d)});
+  b.appendChild(kv);
+  var dt=h('details'),sm=h('summary',null,'Server checks');dt.appendChild(sm);
+  res.trace.forEach(function(t){dt.appendChild(h('div',t.s==='skip'?'mute':t.s,(t.s==='ok'?'\u2713 ':t.s==='bad'?'\u2717 ':'\u2013 ')+t.l))});
+  b.appendChild(dt);
+  if(ok){var d=h('button','btn','Download statement (PDF)');d.onclick=function(){statement(p)};b.appendChild(d)}
+  else{var r=h('button','btn','Try again');r.onclick=function(){pay(m)};b.appendChild(r)}
+  var dn=h('button','btn alt','Done');dn.onclick=closeSheet;b.appendChild(dn);
+  sheet(ok?'Success':'Failed',b);
+}
+</script>
+</body>
+</html>
